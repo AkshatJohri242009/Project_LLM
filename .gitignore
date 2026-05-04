@@ -1,12 +1,9 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
-.coverage
-htmlcov/
 
 # Environments and secrets
 .venv/
@@ -14,35 +11,11 @@ venv/
 env/
 .env
 .env.*
-!.env.example
 
 # Logs and experiment trackers
 *.log
 wandb/
 runs/
-
-# Generated datasets
-data/raw/*
-!data/raw/.gitkeep
-data/processed/*
-!data/processed/.gitkeep
-
-# Generated tokenizer artifacts
-tokenizer/*
-!tokenizer/.gitkeep
-
-# Generated checkpoints and model weights
-checkpoints/*
-!checkpoints/.gitkeep
-*.bin
-*.pt
-*.pth
-*.ckpt
-*.safetensors
-
-# Generated eval outputs
-eval/results/*
-!eval/results/.gitkeep
 
 # OS/editor noise
 .DS_Store
