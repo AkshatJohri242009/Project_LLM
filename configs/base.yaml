@@ -1,0 +1,108 @@
+project:
+  name: scratch-llm
+  seed: 1337
+
+paths:
+  tokenizer_dir: tokenizer
+  processed_dir: data/processed
+  checkpoint_dir: checkpoints
+
+tokenizer:
+  dataset: HuggingFaceFW/fineweb
+  dataset_config: sample-10BT
+  fallback_dataset: wikitext
+  fallback_config: wikitext-103-raw-v1
+  sample_bytes: 1000000000
+  vocab_size: 32000
+  special_tokens:
+    pad: "<|pad|>"
+    bos: "<|bos|>"
+    eos: "<|eos|>"
+    unk: "<|unk|>"
+
+data:
+  source_dataset: HuggingFaceFW/fineweb
+  source_config: sample-10BT
+  fallback_datasets:
+    - {name: allenai/c4, config: en}
+    - {name: wikitext, config: wikitext-103-raw-v1}
+  text_field: text
+  seq_len: 2048
+  val_fraction: 0.05
+  shard_sequences: 8192
+  minhash_permutations: 64
+  minhash_bands: 16
+  jaccard_threshold: 0.85
+  shingle_size: 5
+  language: en
+  language_score_threshold: 0.9
+
+model:
+  n_layers: 12
+  d_model: 768
+  n_heads: 12
+  d_ff: 3072
+  vocab_size: 32000
+  max_seq_len: 2048
+  dropout: 0.0
+
+tiny_model:
+  n_layers: 2
+  d_model: 128
+  n_heads: 4
+  d_ff: 512
+  vocab_size: 32000
+  max_seq_len: 128
+  dropout: 0.0
+
+train:
+  lr: 0.0003
+  min_lr_ratio: 0.1
+  betas: [0.9, 0.95]
+  weight_decay: 0.1
+  eps: 0.00000001
+  warmup_steps: 2000
+  max_steps: 100000
+  batch_size: 512
+  grad_accum_steps: 1
+  low_vram_batch_size: 64
+  low_vram_grad_accum_steps: 8
+  cpu_batch_size: 2
+  cpu_max_steps: 100
+  grad_clip: 1.0
+  eval_interval: 1000
+  eval_tokens: 50000000
+  checkpoint_interval: 5000
+  keep_last_checkpoints: 3
+  wandb: true
+
+sft:
+  dataset: HuggingFaceH4/ultrachat_200k
+  fallback_dataset: yahma/alpaca-cleaned
+  epochs: 3
+  lr: 0.0002
+  batch_size: 32
+  max_seq_len: 2048
+  lora_rank: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules: ["q_proj", "v_proj", "k_proj", "o_proj"]
+
+dpo:
+  dataset: HuggingFaceH4/ultrafeedback_binarized
+  epochs: 1
+  beta: 0.1
+  lr: 0.00005
+  batch_size: 4
+  max_seq_len: 2048
+
+inference:
+  max_new_tokens: 256
+  temperature: 0.7
+  top_p: 0.9
+  top_k: 50
+  port: 8000
+
+eval:
+  tasks: ["hellaswag", "arc_easy", "arc_challenge", "piqa", "winogrande"]
+  results_dir: eval/results

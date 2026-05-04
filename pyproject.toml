@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scratch-llm"
+version = "0.1.0"
+description = "A from-scratch GPT-style LLM training, finetuning, inference, and evaluation codebase."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "torch>=2.2",
+  "transformers",
+  "datasets",
+  "tokenizers",
+  "peft",
+  "trl",
+  "bitsandbytes; platform_system == 'Linux'",
+  "wandb",
+  "lm-eval",
+  "vllm; platform_system == 'Linux'",
+  "numpy",
+  "einops",
+  "rich",
+  "pyyaml",
+  "fastapi",
+  "uvicorn",
+  "pytest",
+  "safetensors",
+]
+
+[tool.setuptools]
+packages = ["model", "train", "finetune", "inference", "eval", "scripts"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
